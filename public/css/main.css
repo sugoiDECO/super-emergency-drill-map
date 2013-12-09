@@ -1,0 +1,31 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+html, body, #map {
+  height: 100%;
+}
+#title {
+  position: absolute;
+  z-index: 9999;
+  background-color: rgba(255,255,255,0.7);
+  top: 0.3em;
+  right: 0.3em;
+  padding: 0.2em 0.4em 0.15em 0.4em;
+  border-radius: 0.2em;
+  font-size: 3em;
+  /* font-family: 'Pinyon Script', cursive; */
+  /* font-family: 'Bad Script', cursive; */
+  font-family: 'Tangerine', cursive;
+}
+img.photo_thumb {
+  max-width: 8em;
+  max-height: 8em;
+}
+ul.photo_thumb {
+  padding-left: 0;
+}
+li.photo_thumb {
+  display: inline;
+  margin: 0.1em;
+}
