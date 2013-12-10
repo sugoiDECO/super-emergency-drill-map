@@ -56,7 +56,7 @@ var getIssueDone = function(json, popup) {
   var popupHtml = popup.getContent() + '<ul class="photo_thumb">';
   $.each(issue.attachments, function(key, attachment) {
     //console.log(attachment.content_url);
-    popupHtml = popupHtml + '<li class="photo_thumb"><img class="photo_thumb" src="' + attachment.content_url + '" /></li>';
+    popupHtml = popupHtml + '<li class="photo_thumb"><a href="' + attachment.content_url + '" data-lightbox=issue_"' + issue.id + '"><img class="photo_thumb" src="' + attachment.content_url + '" /></a></li>';
   });
   popupHtml = popupHtml + '</ul>';
   //console.log(popupHtml);
