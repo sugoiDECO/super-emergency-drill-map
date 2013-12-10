@@ -11,6 +11,7 @@ $(window).load(function() {
   //});
 
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  var treeIcon = new TreeIcon();
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
@@ -27,7 +28,11 @@ $(window).load(function() {
   //console.log('done');
   $.each(json.issues, function(key, issue) {
     var geometry = JSON.parse(issue.geometry);
-    var layer = L.geoJson(geometry).addTo(map);
+    var layer = L.geoJson(geometry,{
+                pointToLayer: function (feature, latlng) {
+                  return L.marker(latlng, {icon: treeIcon});
+                }
+    }).addTo(map);
     //console.log(issue);
     var popupHtml = '';
     popupHtml = '<h2>' + issue.subject + '</h2>';
@@ -79,3 +84,13 @@ var getIssueFail = function(jqxhr, textStatus, error) {
   //console.log('getIssueFail');
 }
 
+var TreeIcon = L.Icon.extend({
+    options: {
+        iconUrl: '/img/marker-icon-2x.png',
+        iconSize:     [35, 41],
+        shadowSize:   [41, 27],
+        iconAnchor:   [11, 41],
+        shadowAnchor: [2, 31],
+        popupAnchor:  [-3, -38]
+    }
+});
