@@ -1,4 +1,5 @@
 var map;
+var markers = [];
 
 $(window).load(function() {
   //console.log('hello');
@@ -28,6 +29,7 @@ $(window).load(function() {
   $.each(json.issues, function(key, issue) {
     var geometry = JSON.parse(issue.geometry);
     var layer = L.geoJson(geometry).addTo(map);
+    markers.push(layer);
     //console.log(issue);
     var popupHtml = '';
     popupHtml = '<h2>' + issue.subject + '</h2>';
@@ -41,6 +43,7 @@ $(window).load(function() {
       }).fail(getIssueFail);
     });
   });
+  map.fitBounds(markersToBounds(markers));
 }).fail(function( jqxhr, textStatus, error ){
   //console.log('fail');
   //console.log(textStatus);
@@ -77,5 +80,15 @@ var getIssueDone = function(json, popup) {
 
 var getIssueFail = function(jqxhr, textStatus, error) {
   //console.log('getIssueFail');
+}
+
+var markersToBounds = function(_markers) {
+  var latlngs = [];
+  $.each(_markers, function(key, marker) {
+    var latlng = marker.getLayers()[0].getLatLng();
+    latlngs.push(latlng);
+  });
+  var bounds = new L.LatLngBounds(latlngs);
+  return bounds;
 }
 
