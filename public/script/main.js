@@ -1,4 +1,5 @@
 var map;
+var markers = [];
 
 $(window).load(function() {
   //console.log('hello');
@@ -33,6 +34,7 @@ $(window).load(function() {
                   return L.marker(latlng, {icon: treeIcon});
                 }
     }).addTo(map);
+    markers.push(layer);
     //console.log(issue);
     var popupHtml = '';
     popupHtml = '<h2>' + issue.subject + '</h2>';
@@ -46,6 +48,7 @@ $(window).load(function() {
       }).fail(getIssueFail);
     });
   });
+  map.fitBounds(markersToBounds(markers));
 }).fail(function( jqxhr, textStatus, error ){
   //console.log('fail');
   //console.log(textStatus);
@@ -84,6 +87,16 @@ var getIssueFail = function(jqxhr, textStatus, error) {
   //console.log('getIssueFail');
 }
 
+var markersToBounds = function(_markers) {
+  var latlngs = [];
+  $.each(_markers, function(key, marker) {
+    var latlng = marker.getLayers()[0].getLatLng();
+    latlngs.push(latlng);
+  });
+  var bounds = new L.LatLngBounds(latlngs);
+  return bounds;
+}
+
 var TreeIcon = L.Icon.extend({
     options: {
         iconUrl: '/img/marker-icon-2x.png',
@@ -94,3 +107,4 @@ var TreeIcon = L.Icon.extend({
         popupAnchor:  [-3, -38]
     }
 });
+
