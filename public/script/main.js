@@ -1,6 +1,12 @@
 var map;
 var markers = [];
 
+$(function() {
+  $("#close-about").click(function() {
+    $('#about').fadeOut(500);
+  });
+});
+
 $(window).load(function() {
   //console.log('hello');
 
