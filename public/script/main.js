@@ -10,8 +10,17 @@ $(window).load(function() {
   //  console.log(e.popup._source);
   //});
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
+  var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
+    return s.toLowerCase();
+  });
+  L.tileLayer(url, {
+    minZoom: 0,
+    maxZoom: 20,
+    type: 'png',
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+    subdomains: ['','a.','b.','c.','d.'],
     }).addTo(map);
 
   $.getJSON('/issues.json').done(function(json){
