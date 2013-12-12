@@ -13,9 +13,12 @@ html, body, #map {
   top: 0.3em;
   right: 0.3em;
   margin: 0;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255,255,255,0.8);
   padding: 0.2em 0.4em 0.15em 0.4em;
-  border-radius: 0.2em;
+  border-radius: 0.5em;
+  border: 1px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.2);
 }
 #title h1 {
   font-size: 3em;
@@ -43,17 +46,45 @@ li.photo_thumb {
 #about {
   position: absolute;
   z-index: 9999;
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0,0,0,0.7);
   top: 0;
   height: 100%;
   width: 100%;
 }
+#about .overlay-ui-wrap {
+  margin: 1em 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+#about .overlay-ui {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 1em;
+  padding: 0;
+  text-align: right;
+}
+#about .overlay-ui a {
+  margin-right: -1em;
+}
+#about .overlay-content-wrap {
+  position: absolute;
+  height: auto;
+  top: 0;
+  bottom: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
 #about .overlay-content {
   background-color: rgba(255,255,255,1.0);
   width: 60%;
-  margin: 2em auto;
-  padding: 1em 2em;
+  height: 100%;
+  margin: 0 auto;
+  padding:0 2em;
   border-radius: 1em;
+  overflow: scroll;
 }
 .overlay-content h1 {
   font-family: 'Tangerine', cursive;
@@ -74,7 +105,43 @@ li.photo_thumb {
   margin-top: 0;
   margin-bottom: 1.5em;
 }
-#about-footer {
+#about .footer {
   margin-top: 1em;
-  text-align: right;
+}
+img#close-about {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+/* social buttons */
+.social-button {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.social-button li {
+  float: left;
+  margin: 0 0.5em 0 0;
+  padding: 0;
+}
+.social-button li div {
+  display: inline;
+}
+.social-button:before,
+.social-button:after {
+  content: " ";
+  display: table;
+}
+.social-button:after {
+  clear: both;
+}
+.social-button {
+  *zoom: 1;
+}
+.social-button iframe.twitter-share-button {
+    width: 90px !important;
+}
+.social-button li p {
+  margin-top: -0.1em;
+  margin-bottom: 0;
 }

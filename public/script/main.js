@@ -2,6 +2,9 @@ var map;
 var markers = [];
 
 $(function() {
+  $("#show-about").click(function() {
+    $('#about').fadeIn(500);
+  });
   $("#close-about").click(function() {
     $('#about').fadeOut(500);
   });
