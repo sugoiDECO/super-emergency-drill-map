@@ -46,7 +46,7 @@ $(window).load(function() {
     markers.push(layer);
     //console.log(issue);
     var popupHtml = '';
-    popupHtml = '<h2>' + issue.subject + '</h2>';
+    popupHtml = '<a href="http://beta.shirasete.jp/issues/' + issue.id + '" target="_blank"><h2>' + issue.subject + '</h2></a>';
     layer.bindPopup(popupHtml, {maxWidth: 1024});
     layer.on('popupopen', function(e) {
       //console.log('popupopen');
