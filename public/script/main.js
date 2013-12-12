@@ -32,6 +32,7 @@ $(window).load(function() {
     type: 'png',
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
     subdomains: ['','a.','b.','c.','d.'],
+    detectRetina: true
     }).addTo(map);
 
   $.getJSON('/issues.json').done(function(json){
@@ -113,7 +114,7 @@ var TreeIcon = L.Icon.extend({
         shadowSize:   [41, 27],
         iconAnchor:   [11, 41],
         shadowAnchor: [2, 31],
-        popupAnchor:  [-3, -38]
+        popupAnchor:  [7, -41]
     }
 });
 

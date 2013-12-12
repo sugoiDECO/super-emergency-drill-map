@@ -6,6 +6,12 @@ html, body, #map {
   height: 100%;
 }
 
+@media screen and (max-width: 480px) {
+  .leaflet-control-zoom.leaflet-bar.leaflet-control {
+    display: none;
+  }
+}
+
 /* Logo */
 #title {
   position: absolute;
@@ -30,6 +36,24 @@ html, body, #map {
 #title p.subtitle {
   margin-top: 0;
   text-align: center;
+}
+@media screen and (max-width: 480px) {
+  #title {
+    max-width: 300px;
+  }
+  #title h1 {
+    display: none;
+    /* height: 0;
+    margin: 0;
+    padding: 0; */
+  }
+  #title p.subtitle {
+    display: none;
+    /* visible: none;
+    height: 0;
+    margin: 0;
+    padding: 0; */
+  }
 }
 
 img.photo_thumb {
@@ -85,6 +109,19 @@ li.photo_thumb {
   padding:0 2em;
   border-radius: 1em;
   overflow: scroll;
+}
+@media screen and (max-width: 480px) {
+  #about .overlay-ui {
+    width: 80%;
+    padding:0 1em;
+  }
+  #about .overlay-content {
+    width: 80%;
+    padding:0 1em;
+  }
+  #about .overlay-ui a {
+    margin-right: 0;
+  }
 }
 .overlay-content h1 {
   font-family: 'Tangerine', cursive;
