@@ -97,7 +97,10 @@ li.photo_thumb {
   margin-bottom: 0.3em;
   padding: 0;
 }
-.overlay-content p {
+.overlay-content h3 {
+  margin-bottom: 0;
+}
+.overlay-content p, ul {
   margin:0;
 }
 .overlay-content p.subtitle {
