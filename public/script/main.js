@@ -30,7 +30,7 @@ $(window).load(function() {
     minZoom: 0,
     maxZoom: 20,
     type: 'png',
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+    attribution: 'Marker design by <a href="https://www.iconfinder.com/icons/214678/christmas_tree_icon">Ploup Design</a>, Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
     subdomains: ['','a.','b.','c.','d.'],
     detectRetina: true
     }).addTo(map);
