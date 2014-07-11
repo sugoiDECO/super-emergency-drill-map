@@ -1,5 +1,7 @@
 var map;
 var markers = [];
+var firsttime = true;
+var issues = [];
 
 $(function() {
   $("#show-about").click(function() {
@@ -21,50 +23,76 @@ $(window).load(function() {
   //});
 
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  var treeIcon = new TreeIcon();
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
   });
-  L.tileLayer(url, {
+  var googleLayer = new L.Google('ROADMAP');
+  L.mapbox.tileLayer('georepublic.h7fk5kam', {
     minZoom: 0,
     maxZoom: 20,
     type: 'png',
-    attribution: 'Marker design by <a href="https://www.iconfinder.com/icons/214678/christmas_tree_icon">Ploup Design</a>, Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+    attribution: 'OpenStreetMap contributors, CC-BY-SA, Imagery © Mapbox',
     subdomains: ['','a.','b.','c.','d.'],
     detectRetina: true
     }).addTo(map);
+  //map.addLayer(googleLayer);
+  //
+  readIssues();
 
-  $.getJSON('/issues.json').done(function(json){
-  //console.log('done');
-  $.each(json.issues, function(key, issue) {
-    var geometry = JSON.parse(issue.geometry);
-    var layer = L.geoJson(geometry,{
-                pointToLayer: function (feature, latlng) {
-                  return L.marker(latlng, {icon: treeIcon});
-                }
-    }).addTo(map);
-    markers.push(layer);
-    //console.log(issue);
-    var popupHtml = '';
-    popupHtml = '<a href="http://beta.shirasete.jp/issues/' + issue.id + '" target="_blank"><h2>' + issue.subject + '</h2></a>';
-    layer.bindPopup(popupHtml, {maxWidth: 1024});
-    layer.on('popupopen', function(e) {
-      //console.log('popupopen');
-      //console.log(e.popup);
-      $.getJSON('/issues/'+ issue.id+ '.json').done(function(json){
-        getIssueDone(json, e.popup);
-        layer.clearAllEventListeners();
-      }).fail(getIssueFail);
+});
+
+var readIssues = function(){
+  var treeIcon = new TreeIcon();
+  var loadIssues = function(offset){
+    $.getJSON('/issues.json?offset=' + offset + "&limit=100").done(function(json){
+    //console.log('done');
+    $.each(json.issues, function(key, issue) {
+        var geometry = JSON.parse(issue.geometry);
+        if ($.inArray(issue.id, issues) >= 0){
+          console.log('skip');
+          return true;
+        }
+        issues.push(issue.id)
+        var layer = L.geoJson(geometry,{
+            pointToLayer: function (feature, latlng) {
+              treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
+              return L.marker(latlng, {icon: treeIcon});
+            }
+          }).addTo(map);
+        markers.push(layer);
+        //console.log(issue);
+        var popupHtml = '';
+        popupHtml = '<a href="http://beta.shirasete.jp/issues/' + issue.id + '" target="_blank"><h2>' + issue.subject + '</h2></a>';
+        layer.bindPopup(popupHtml, {maxWidth: 1024});
+        layer.on('popupopen', function(e) {
+            //console.log('popupopen');
+            //console.log(e.popup);
+            $.getJSON('/issues/'+ issue.id+ '.json').done(function(json){
+                getIssueDone(json, e.popup);
+                layer.clearAllEventListeners();
+              }).fail(getIssueFail);
+          });
+      });
+    if (firsttime){
+      map.fitBounds(markersToBounds(markers));
+      if (json.total_count > json.offset + json.limit){
+        loadIssues(json.offset + json.limit)
+      }else{
+        firsttime = false;
+        setTimeout(readIssues,1000);
+      }
+    }else{
+      setTimeout(readIssues,1000);
+    }
+    }).fail(function( jqxhr, textStatus, error ){
+      //console.log('fail');
+      //console.log(textStatus);
+      //console.log(error);
     });
-  });
-  map.fitBounds(markersToBounds(markers));
-}).fail(function( jqxhr, textStatus, error ){
-  //console.log('fail');
-  //console.log(textStatus);
-  //console.log(error);
-});
-});
+  };
+  loadIssues(0);
+}
 
 var getIssueDone = function(json, popup) {
   //console.log('getIssueDone');
@@ -110,10 +138,7 @@ var markersToBounds = function(_markers) {
 var TreeIcon = L.Icon.extend({
     options: {
         iconUrl: '/img/marker-icon-2x.png',
-        iconSize:     [35, 41],
-        shadowSize:   [41, 27],
-        iconAnchor:   [11, 41],
-        shadowAnchor: [2, 31],
+        iconSize:     [14, 14],
         popupAnchor:  [7, -41]
     }
 });
