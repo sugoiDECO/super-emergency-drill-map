@@ -3,6 +3,7 @@ var markers = [];
 var firsttime = true;
 var issues = [];
 var MAPBOX_URL = 'memeshiexe.j033d7pl'
+//var MAPBOX_URL = 'georepublic.h7fk5kam'
 
 $(function() {
   $("#show-about").click(function() {
@@ -24,6 +25,19 @@ $(window).load(function() {
   //});
 
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  var customLayer = L.geoJson(null, {
+     // http://leafletjs.com/reference.html#geojson-style
+     style: function(feature) {
+         return {
+           color: '#33f'
+         };
+       }
+     });
+  var runLayer = omnivore.kml('/kml/KINKYUYUSORO_AREA.kml', null, customLayer)
+      .on('ready', function() {
+          map.fitBounds(runLayer.getBounds());
+         })
+      .addTo(map);
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
@@ -62,7 +76,7 @@ var readIssues = function(){
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
               treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
-              marker = L.marker(latlng, {icon: treeIcon, opacity:0.0});
+              marker = L.marker(latlng, {icon: treeIcon, opacity:0.5});
               opacityController.setOpacity(issue, marker);
               return marker;
             }
@@ -82,11 +96,11 @@ var readIssues = function(){
           });
       });
     if (firsttime){
-      map.fitBounds(markersToBounds(markers));
+      //map.fitBounds(markersToBounds(markers));
+      firsttime = false;
       if (json.total_count > json.offset + json.limit){
         loadIssues(json.offset + json.limit)
       }else{
-        firsttime = false;
         setTimeout(readIssues,1000);
       }
     }else{
@@ -153,15 +167,18 @@ var makeOpacityController = (function(){
           if (lastDates[aid].getTime() < date.getTime()){
             console.log('move to new');
             if (aid in lastMarkers){
-              lastMarkers[aid].options.opacity = 0.3;
+              lastMarkers[aid].options.opacity = 0.5;
+              lastMarkers[aid].options.iconSize = [6,6];
             }
             lastMarkers[aid]= _marker;
             lastDates[aid] = date;
             _marker.options.opacity = 1.0;
+            //_marker.options.icon.options.iconSize = [12,12];
           }
         }else{
           console.log(_marker)
           _marker.options.opacity = 1.0;
+          //_marker.options.icon.options.iconSize = [12,12];
           lastDates[aid] = date
           lastMarkers[aid] = _marker;
         }
