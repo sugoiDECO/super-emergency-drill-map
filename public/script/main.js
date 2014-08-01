@@ -48,7 +48,9 @@ $(window).load(function() {
   var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
   map.addLayer(hinanbasho);
   var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
-  kmlLayer.on('loaded', function(e){});
+  kmlLayer.on('loaded', function(e){
+      console.log(e.target);
+    });
   map.addLayer(kmlLayer);
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
@@ -88,7 +90,7 @@ var readIssues = function(){
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
               treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
-              marker = L.marker(latlng, {icon: treeIcon, opacity:0.5});
+              marker = L.marker(latlng, {icon: treeIcon, opacity:1.0});
               opacityController.setOpacity(issue, marker);
               return marker;
             }
@@ -179,7 +181,7 @@ var makeOpacityController = (function(){
           if (lastDates[aid].getTime() < date.getTime()){
             console.log('move to new');
             if (aid in lastMarkers){
-              lastMarkers[aid].options.opacity = 0.5;
+              lastMarkers[aid].options.opacity = 1.0;
               lastMarkers[aid].options.iconSize = [6,6];
             }
             lastMarkers[aid]= _marker;
