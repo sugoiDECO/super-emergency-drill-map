@@ -25,19 +25,31 @@ $(window).load(function() {
   //});
 
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  var redLayer = L.geoJson(null, {
+     // http://leafletjs.com/reference.html#geojson-style
+     style: function(feature) {
+         return {
+           color: '#55f'
+         };
+       }
+     });
   var customLayer = L.geoJson(null, {
      // http://leafletjs.com/reference.html#geojson-style
      style: function(feature) {
          return {
-           color: '#33f'
+           color: '#55f'
          };
        }
      });
-  var runLayer = omnivore.kml('/kml/KINKYUYUSORO_AREA.kml', null, customLayer)
-      .on('ready', function() {
-          map.fitBounds(runLayer.getBounds());
-         })
-      .addTo(map);
+  var runLayer = new L.KML('/kml/KINKYUYUSORO_AREA.kml', {async: true});
+  map.addLayer(runLayer);
+  runLayer.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
+
+  var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
+  map.addLayer(hinanbasho);
+  var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
+  kmlLayer.on('loaded', function(e){});
+  map.addLayer(kmlLayer);
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
