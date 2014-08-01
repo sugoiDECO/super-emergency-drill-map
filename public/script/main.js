@@ -2,6 +2,7 @@ var map;
 var markers = [];
 var firsttime = true;
 var issues = [];
+var MAPBOX_URL = 'memeshiexe.j033d7pl'
 
 $(function() {
   $("#show-about").click(function() {
@@ -15,7 +16,7 @@ $(function() {
 $(window).load(function() {
   //console.log('hello');
 
-  map = L.map('map').setView([35.67740687825185, 139.71395820379257], 5);
+  map = L.map('map', {zoomControl: false}).setView([35.67740687825185, 139.71395820379257], 5);
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
@@ -28,7 +29,7 @@ $(window).load(function() {
     return s.toLowerCase();
   });
   var googleLayer = new L.Google('ROADMAP');
-  L.mapbox.tileLayer('georepublic.h7fk5kam', {
+  L.mapbox.tileLayer(MAPBOX_URL, {
     minZoom: 0,
     maxZoom: 20,
     type: 'png',
@@ -36,6 +37,7 @@ $(window).load(function() {
     subdomains: ['','a.','b.','c.','d.'],
     detectRetina: true
     }).addTo(map);
+  new L.Control.Zoom({ position: 'topright' }).addTo(map);
   //map.addLayer(googleLayer);
   //
   readIssues();
@@ -44,20 +46,25 @@ $(window).load(function() {
 
 var readIssues = function(){
   var treeIcon = new TreeIcon();
+  var opacityController = makeOpacityController();
   var loadIssues = function(offset){
     $.getJSON('/issues.json?offset=' + offset + "&limit=100").done(function(json){
     //console.log('done');
+    //console.log(json);
     $.each(json.issues, function(key, issue) {
         var geometry = JSON.parse(issue.geometry);
         if ($.inArray(issue.id, issues) >= 0){
-          console.log('skip');
+          //console.log('skip');
           return true;
         }
         issues.push(issue.id)
+        var marker;
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
               treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
-              return L.marker(latlng, {icon: treeIcon});
+              marker = L.marker(latlng, {icon: treeIcon, opacity:0.0});
+              opacityController.setOpacity(issue, marker);
+              return marker;
             }
           }).addTo(map);
         markers.push(layer);
@@ -135,10 +142,36 @@ var markersToBounds = function(_markers) {
   return bounds;
 }
 
+var makeOpacityController = (function(){
+    var lastMarkers = [];
+    var lastDates = [];
+    return {
+      setOpacity: function(_issue, _marker){
+        var aid = _issue.author.id;
+        date = new Date(_issue.created_on);
+        if (aid in lastDates){
+          if (lastDates[aid].getTime() < date.getTime()){
+            console.log('move to new');
+            if (aid in lastMarkers){
+              lastMarkers[aid].options.opacity = 0.3;
+            }
+            lastMarkers[aid]= _marker;
+            lastDates[aid] = date;
+            _marker.options.opacity = 1.0;
+          }
+        }else{
+          console.log(_marker)
+          _marker.options.opacity = 1.0;
+          lastDates[aid] = date
+          lastMarkers[aid] = _marker;
+        }
+      }
+    }
+});
 var TreeIcon = L.Icon.extend({
     options: {
         iconUrl: '/img/marker-icon-2x.png',
-        iconSize:     [14, 14],
+        iconSize:     [6, 6],
         popupAnchor:  [7, -41]
     }
 });

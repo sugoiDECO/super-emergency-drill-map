@@ -16,21 +16,20 @@ html, body, #map {
 #title {
   position: absolute;
   z-index: 9999;
-  top: 0.3em;
-  right: 0.3em;
-  margin: 0;
+  margin: 0 20px 0 0 ;
   background-color: rgba(255,255,255,0.8);
-  padding: 0.2em 0.4em 0.15em 0.4em;
-  border-radius: 0.5em;
+  padding: 0 0.4em 0.15em 0.4em;
   border: 1px;
   border-style: solid;
   border-color: rgba(0,0,0,0.2);
+  width:95%;
 }
 #title h1 {
   font-size: 3em;
   /* font-family: 'Pinyon Script', cursive; */
   /* font-family: 'Bad Script', cursive; */
   font-family: 'Tangerine', cursive;
+  margin-top: 0;
   margin-bottom: 0;
 }
 #title p.subtitle {
