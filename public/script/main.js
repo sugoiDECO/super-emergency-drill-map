@@ -47,11 +47,12 @@ $(window).load(function() {
 
   var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
   map.addLayer(hinanbasho);
-  var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
+  /*var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
   kmlLayer.on('loaded', function(e){
       console.log(e.target);
     });
   map.addLayer(kmlLayer);
+  */
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
@@ -111,11 +112,11 @@ var readIssues = function(){
       });
     if (firsttime){
       //map.fitBounds(markersToBounds(markers));
-      firsttime = false;
       if (json.total_count > json.offset + json.limit){
         loadIssues(json.offset + json.limit)
       }else{
         setTimeout(readIssues,1000);
+        firsttime = false;
       }
     }else{
       setTimeout(readIssues,1000);
@@ -181,7 +182,7 @@ var makeOpacityController = (function(){
           if (lastDates[aid].getTime() < date.getTime()){
             console.log('move to new');
             if (aid in lastMarkers){
-              lastMarkers[aid].options.opacity = 1.0;
+              lastMarkers[aid].options.opacity = 0.5;
               lastMarkers[aid].options.iconSize = [6,6];
             }
             lastMarkers[aid]= _marker;
