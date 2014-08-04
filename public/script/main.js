@@ -36,7 +36,8 @@ $(window).load(function() {
      // http://leafletjs.com/reference.html#geojson-style
      style: function(feature) {
          return {
-           color: '#55f'
+           color: '#55f',
+           opacity: 0.1
          };
        }
      });
@@ -44,22 +45,31 @@ $(window).load(function() {
      // http://leafletjs.com/reference.html#geojson-style
      style: function(feature) {
          return {
-           color: '#55f'
+           color: '#55f',
+           opacity: 0.1
          };
        }
      });
   var runLayer = new L.KML('/kml/KINKYUYUSORO_AREA.kml', {async: true});
   map.addLayer(runLayer);
-  runLayer.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
+  runLayer.on("loaded", function(e) {
+      map.fitBounds(e.target.getBounds());
+      runLayer.setStyle({opacity:0.3});
+  });
 
   var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
   map.addLayer(hinanbasho);
-  /*var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
-  kmlLayer.on('loaded', function(e){
-      console.log(e.target);
-    });
+  hinanbasho.on("loaded", function(e) {
+      hinanbasho.setStyle({opacity:0.3});
+  });
+
+  /*
+  var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
   map.addLayer(kmlLayer);
-  */
+  kmlLayer.on('loaded', function(e){
+      kmlLayer.setStyle({opacity:0.3, scale:0.1});
+    });
+    */
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
@@ -98,7 +108,7 @@ var readIssues = function(){
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
               treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
-              marker = L.marker(latlng, {icon: treeIcon, opacity:1.0});
+              marker = L.marker(latlng, {icon: treeIcon, opacity:0.6});
               opacityController.setOpacity(issue, marker);
               return marker;
             }
