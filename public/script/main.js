@@ -200,7 +200,7 @@ var makeIssueMarkerController = (function(){
       }
     var getHeadIcon = function(_issue){
         var icon = new HeadIcon();
-        icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
+        icon.options.iconUrl = '/img/head-icon-' + (_issue.author.id % 6) + '.gif';
         return icon;
       }
     return {
@@ -214,16 +214,31 @@ var makeIssueMarkerController = (function(){
       },
       arrangeIcons: function(){
         $.each(markers, function(key, markers2){
-          $.each(markers2, function(key,marker){
-            var date = new Date(marker.issue.created_on);
-            if (lastDates[marker.issue.author.id] == undefined ||
-              lastDates[marker.issue.author.id].getTime() < date.getTime()
-            ){
-              console.log('max time!');
-              lastDates[marker.issue.author.id] = date;
+            var maxId;
+            var maxDate;
+            $.each(markers2, function(key,marker){
+                var date = new Date(marker.issue.created_on);
+                if (maxDate == undefined ||
+                  maxDate.getTime() < date.getTime()
+                ){
+                  maxId = marker.issue.id;
+                  maxDate = date;
+                }
+              });
+            if (lastMarkers[key] == undefined || lastMarkers[key].issue.id != maxId){
+              console.log('renew max time!');
+              $.each(markers2, function(k,marker){
+                  if (marker.issue.id == maxId){
+                    marker.setIcon(getHeadIcon(marker.issue));
+                    marker.setOpacity(1.0);
+                    lastMarkers[key] = marker;
+                  }else{
+                    marker.setIcon(getTreeIcon(marker.issue));
+                    marker.setOpacity(0.5);
+                  }
+              });
             }
           });
-      });
       }
     }
 });
