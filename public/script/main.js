@@ -238,9 +238,9 @@ var taskLoader = (function(){
             var layer = L.geoJson(geometry,{
                 pointToLayer: function (feature, latlng) {
                   if (issue.status.id == 3 || issue.status.id == 4){
-                    taskIcon.options.iconUrl = '/img/task-icon-done-' + (issue.author.id % 6) + '.png';
+                    taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
                   }else{
-                    taskIcon.options.iconUrl = '/img/task-icon-' + (issue.author.id % 6) + '.png';
+                    taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
                   }
                   var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
                   return marker;
