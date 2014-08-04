@@ -237,6 +237,7 @@ var TaskIcon = L.Icon.extend({
 var TaskLoader = (function(){
     var tasks = [];
     var markers = {};
+    var layers = {};
     var taskIcon = new TaskIcon();
     var stop = [];
     return {
@@ -252,16 +253,16 @@ var TaskLoader = (function(){
         console.log('load ' + taskId);
         var _this = this;
         $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
-            console.log(json);
+            //console.log(json);
             $.each(json.issues, function(key, issue) {
                 if (issue.geometry == "") return;
-                var tid = issue.id
-                if (tasks.indexOf(tid) > -1){
+                var iid = "" + issue.id
+                if (tasks.indexOf(iid) > -1){
                   if (markers[taskId][issue.id].issue.status.id != issue.status.id){
                     markers[taskId][issue.id].setIcon(taskLoader.getIcon(issue));
                   }
                 }else{
-                  tasks.push(issue.id)
+                  tasks.push(iid)
                   var geometry = JSON.parse(issue.geometry);
                   var marker;
                   var layer = L.geoJson(geometry,{
@@ -270,16 +271,23 @@ var TaskLoader = (function(){
                         var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
                         marker.issue = issue;
                         if (markers[taskId] == undefined) markers[taskId] = {};
-                        markers[taskId][issue.id] = marker;
+                        markers[taskId][iid] = marker;
                         return marker;
                       }
                     }).addTo(map);
+                  layers[iid] = layer;
                 }
               })
             if (stop[taskId] == undefined){
               setTimeout("taskLoader.load(" + taskId + ")", 1000);
             }else{
               stop[taskId] = undefined;
+              $.each(markers[taskId], function(key, marker){
+                  map.removeLayer(layers[key]);
+                  layers[marker.issue.id] = undefined;
+                  tasks.splice(tasks.indexOf(marker.issue.id),1);
+                })
+              markers[taskId] = {};
             }
           })
       },
