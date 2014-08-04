@@ -184,3 +184,12 @@ img#close-about {
   margin-top: -0.1em;
   margin-bottom: 0;
 }
+
+/* menu */
+#menu {
+  float: right;
+}
+#menu li {
+  list-style-type: none;
+  display: inline;
+}
