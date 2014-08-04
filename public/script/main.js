@@ -141,9 +141,10 @@ var readIssues = function(){
       setTimeout(readIssues,1000);
     }
     }).fail(function( jqxhr, textStatus, error ){
-      //console.log('fail');
-      //console.log(textStatus);
-      //console.log(error);
+      console.log('fail');
+      console.log(textStatus);
+      console.log(error);
+      setTimeout(loadIssues, 1000);
     });
   };
   loadIssues(0);
@@ -235,7 +236,7 @@ var makeIssueMarkerController = (function(){
                     lastMarkers[key] = marker;
                   }else{
                     marker.setIcon(getTreeIcon(marker.issue));
-                    marker.setOpacity(0.5);
+                    marker.setOpacity(0.7);
                   }
               });
             }
