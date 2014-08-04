@@ -95,7 +95,7 @@ $(window).load(function() {
 
 var readIssues = function(){
   var treeIcon = new TreeIcon();
-  var opacityController = makeOpacityController();
+  var markerController = makeIssueMarkerController();
   var loadIssues = function(offset){
     $.getJSON('/issues.json?offset=' + offset + "&limit=100").done(function(json){
     //console.log('done');
@@ -110,9 +110,7 @@ var readIssues = function(){
         var marker;
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
-              marker = L.marker(latlng);
-              opacityController.setOpacity(issue, marker);
-              return marker;
+              return markerController.loadMarker(issue, latlng);
             }
           }).addTo(map);
         markers.push(layer);
@@ -129,6 +127,7 @@ var readIssues = function(){
               }).fail(getIssueFail);
           });
       });
+    markerController.arrangeIcons();
     if (firsttime){
       //map.fitBounds(markersToBounds(markers));
       if (json.total_count > json.offset + json.limit){
@@ -190,9 +189,10 @@ var markersToBounds = function(_markers) {
   return bounds;
 }
 
-var makeOpacityController = (function(){
+var makeIssueMarkerController = (function(){
     var lastMarkers = [];
     var lastDates = [];
+    var markers = {};
     var getTreeIcon = function(_issue){
         var icon = new TreeIcon();
         icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
@@ -204,25 +204,26 @@ var makeOpacityController = (function(){
         return icon;
       }
     return {
-      setOpacity: function(_issue, _marker){
+      loadMarker: function(_issue, latlng){
+        var marker = L.marker(latlng, {icon: getTreeIcon(_issue)});
         var aid = _issue.author.id;
-        date = new Date(_issue.created_on);
-        if (aid in lastDates){
-          if (lastDates[aid].getTime() <= date.getTime()){
-            lastMarkers[aid].setIcon(getTreeIcon(_issue));
-            _marker.options.opacity=0.5;
-            _marker.setIcon(getHeadIcon(_issue));
-            lastDates[aid] = date;
-            lastDates[aid] = date
-          }else{
-            _marker.setIcon(getTreeIcon(_issue));
-            _marker.options.opacity=0.5;
-          }
-        }else{
-          _marker.setIcon(getHeadIcon(_issue));
-          lastMarkers[aid] = _marker;
-          lastDates[aid] = date
-        }
+        if (markers[aid] == undefined) markers[aid] = [];
+        marker.issue = _issue;
+        markers[aid].push(marker)
+        return marker;
+      },
+      arrangeIcons: function(){
+        $.each(markers, function(key, markers2){
+          $.each(markers2, function(key,marker){
+            var date = new Date(marker.issue.created_on);
+            if (lastDates[marker.issue.author.id] == undefined ||
+              lastDates[marker.issue.author.id].getTime() < date.getTime()
+            ){
+              console.log('max time!');
+              lastDates[marker.issue.author.id] = date;
+            }
+          });
+      });
       }
     }
 });
