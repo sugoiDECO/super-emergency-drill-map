@@ -4,9 +4,10 @@ var firsttime = true;
 var issues = [];
 var MAPBOX_URL = 'memeshiexe.j033d7pl'
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
+var taskLoader
 
 $(function() {
-  var _taskLoader = new taskLoader();
+  taskLoader = new TaskLoader();
   $("#show-about").click(function() {
     $('#about').fadeIn(500);
   });
@@ -14,9 +15,11 @@ $(function() {
     $('#about').fadeOut(500);
   });
   $("#menu input[type='checkbox']").click(function(){
+      var tid = $(this).attr('id').split('_')[1];
       if ($(this).prop('checked') == true){
-        var tid = $(this).attr('id').split('_')[1];
-        _taskLoader.load(tid);
+        taskLoader.load(tid);
+      }else{
+        taskLoader.cancel(tid);
       }
   })
 });
@@ -231,40 +234,57 @@ var TaskIcon = L.Icon.extend({
         popupAnchor:  [7, -41]
     }
 });
-var taskLoader = (function(){
+var TaskLoader = (function(){
     var tasks = [];
     var markers = {};
     var taskIcon = new TaskIcon();
+    var stop = [];
     return {
+      getIcon: function(issue){
+        if (issue.status.id == 3 || issue.status.id == 4){
+          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
+        }else{
+          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
+        }
+        return taskIcon;
+      },
       load: function(taskId){
         console.log('load ' + taskId);
+        var _this = this;
         $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
             console.log(json);
             $.each(json.issues, function(key, issue) {
                 if (issue.geometry == "") return;
-                if (issue.id in tasks){
-                  console.log('skip');
+                var tid = issue.id
+                if (tasks.indexOf(tid) > -1){
+                  if (markers[taskId][issue.id].issue.status.id != issue.status.id){
+                    markers[taskId][issue.id].setIcon(taskLoader.getIcon(issue));
+                  }
                 }else{
-                  var geometry = JSON.parse(issue.geometry);
                   tasks.push(issue.id)
+                  var geometry = JSON.parse(issue.geometry);
                   var marker;
                   var layer = L.geoJson(geometry,{
                       pointToLayer: function (feature, latlng) {
-                        if (issue.status.id == 3 || issue.status.id == 4){
-                          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
-                        }else{
-                          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
-                        }
+                        var icon = taskLoader.getIcon(issue);
                         var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
-                        if (markers[issue.id] == undefined) markers[issue.id] = [];
-                        markers[issue.id].push(layer);
+                        marker.issue = issue;
+                        if (markers[taskId] == undefined) markers[taskId] = {};
+                        markers[taskId][issue.id] = marker;
                         return marker;
                       }
                     }).addTo(map);
                 }
               })
-            //setTimeout(this(taskId), 1000);
+            if (stop[taskId] == undefined){
+              setTimeout("taskLoader.load(" + taskId + ")", 1000);
+            }else{
+              stop[taskId] = undefined;
+            }
           })
+      },
+      cancel: function(taskid){
+        stop[taskid] = true;
       }
     }
 });
