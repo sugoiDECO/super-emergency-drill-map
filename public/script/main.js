@@ -208,7 +208,7 @@ var makeOpacityController = (function(){
             //_marker.options.icon.options.iconSize = [12,12];
           }
         }else{
-          console.log(_marker)
+          //console.log(_marker)
           _marker.options.opacity = 1.0;
           //_marker.options.icon.options.iconSize = [12,12];
           lastDates[aid] = date
@@ -239,27 +239,32 @@ var taskLoader = (function(){
       load: function(taskId){
         console.log('load ' + taskId);
         $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
-          console.log(json);
-          $.each(json.issues, function(key, issue) {
-            if (issue.geometry == "") return;
-            var geometry = JSON.parse(issue.geometry);
-            tasks.push(issue.id)
-            var marker;
-            var layer = L.geoJson(geometry,{
-                pointToLayer: function (feature, latlng) {
-                  if (issue.status.id == 3 || issue.status.id == 4){
-                    taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
-                  }else{
-                    taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
-                  }
-                  var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
-                  return marker;
+            console.log(json);
+            $.each(json.issues, function(key, issue) {
+                if (issue.geometry == "") return;
+                if (issue.id in tasks){
+                  console.log('skip');
+                }else{
+                  var geometry = JSON.parse(issue.geometry);
+                  tasks.push(issue.id)
+                  var marker;
+                  var layer = L.geoJson(geometry,{
+                      pointToLayer: function (feature, latlng) {
+                        if (issue.status.id == 3 || issue.status.id == 4){
+                          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
+                        }else{
+                          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
+                        }
+                        var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
+                        if (markers[issue.id] == undefined) markers[issue.id] = [];
+                        markers[issue.id].push(layer);
+                        return marker;
+                      }
+                    }).addTo(map);
                 }
-              }).addTo(map);
-            if (markers[issue.id] == undefined) markers[issue.id] = [];
-            markers[issue.id].push(layer);
+              })
+            //setTimeout(this(taskId), 1000);
           })
-      })
       }
     }
 });
