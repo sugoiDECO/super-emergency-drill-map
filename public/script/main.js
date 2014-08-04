@@ -209,6 +209,7 @@ var makeIssueMarkerController = (function(){
     return {
       loadMarker: function(_issue, latlng){
         var marker = L.marker(latlng, {icon: getTreeIcon(_issue)});
+        marker.setOpacity(0.7);
         var aid = _issue.author.id;
         if (markers[aid] == undefined) markers[aid] = [];
         marker.issue = _issue;
