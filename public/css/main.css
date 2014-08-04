@@ -36,6 +36,16 @@ html, body, #map {
   margin-top: 0;
   text-align: center;
 }
+#logo {
+  float:left;
+  margin-right:20px;
+}
+#timer {
+  font-family: "Osaka－等幅","Osaka-Mono";
+  font-weight: bolder;
+  font-size: 56px;
+  line-height:65px;
+}
 @media screen and (max-width: 480px) {
   #title {
     max-width: 300px;
@@ -188,6 +198,8 @@ img#close-about {
 /* menu */
 #menu {
   float: right;
+  width:300px;
+  margin-top:10px;
 }
 #menu li {
   list-style-type: none;

@@ -79,7 +79,7 @@ $(window).load(function() {
     minZoom: 0,
     maxZoom: 20,
     type: 'png',
-    attribution: 'OpenStreetMap contributors, CC-BY-SA, Imagery © Mapbox',
+    attribution: 'OpenStreetMap contributors, CC-BY-SA, Imagery © Mapbox, Check Mark designed by <a href="http://www.thenounproject.com/Yaosamo">Yaroslav Samoilov</a> from the <a href="http://www.thenounproject.com">Noun Project</a> ',
     subdomains: ['','a.','b.','c.','d.'],
     detectRetina: true
     }).addTo(map);
