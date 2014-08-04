@@ -2,6 +2,8 @@ var map;
 var firsttime = true;
 var issues = [];
 var MAPBOX_URL = 'memeshiexe.j033d7pl'
+var IDS_DEFAULT = ["109","110","111","112","113","114"];
+//var MAPBOX_URL = 'memeshiexe.j07gc8o7'
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
 var taskLoader;
 var markerController;
@@ -192,7 +194,7 @@ var makeIssueMarkerController = (function(){
     var lastMarkers = [];
     var lastDates = [];
     var markers = {};
-    var hiddenmarkers = ["109","110","111","112","113","114"];
+    var hiddenmarkers = IDS_DEFAULT.concat();
     var getTreeIcon = function(_issue){
         var icon = new TreeIcon();
         icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
@@ -279,7 +281,7 @@ var TaskLoader = (function(){
     var markers = {};
     var layers = {};
     var taskIcon = new TaskIcon();
-    var stop = [];
+    var stop = IDS_DEFAULT.concat();
     return {
       getIcon: function(issue){
         if (issue.status.id == 3 || issue.status.id == 4){
@@ -290,9 +292,11 @@ var TaskLoader = (function(){
         return taskIcon;
       },
       load: function(taskId){
+        if (stop.indexOf("" + taskId) > -1){
+          stop.splice(stop.indexOf("" + taskId), 1);
+        }
         var _this = this;
         $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
-            //console.log(json);
             $.each(json.issues, function(key, issue) {
                 if (issue.geometry == "") return;
                 var iid = "" + issue.id
@@ -317,10 +321,9 @@ var TaskLoader = (function(){
                   layers[iid] = layer;
                 }
               })
-            if (stop[taskId] == undefined){
+            if (stop.indexOf("" + taskId) == -1){
               setTimeout("taskLoader.load(" + taskId + ")", 1000);
             }else{
-              stop[taskId] = undefined;
               $.each(markers[taskId], function(key, marker){
                   map.removeLayer(layers[key]);
                   layers[marker.issue.id] = undefined;
@@ -331,7 +334,9 @@ var TaskLoader = (function(){
           })
       },
       cancel: function(taskid){
-        stop[taskid] = true;
+        if (stop.indexOf(taskid) == -1){
+          stop.push(taskid);
+        }
       }
     }
 });

@@ -198,10 +198,11 @@ img#close-about {
 /* menu */
 #menu {
   float: right;
-  width:300px;
+  width:320px;
   margin-top:10px;
 }
 #menu li {
   list-style-type: none;
   display: inline;
+  font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
