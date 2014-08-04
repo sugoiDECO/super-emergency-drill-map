@@ -110,8 +110,7 @@ var readIssues = function(){
         var marker;
         var layer = L.geoJson(geometry,{
             pointToLayer: function (feature, latlng) {
-              treeIcon.options.iconUrl = '/img/marker-icon-' + (issue.author.id % 6) + '-2x.png';
-              marker = L.marker(latlng, {icon: treeIcon, opacity:0.6});
+              marker = L.marker(latlng);
               opacityController.setOpacity(issue, marker);
               return marker;
             }
@@ -194,37 +193,51 @@ var markersToBounds = function(_markers) {
 var makeOpacityController = (function(){
     var lastMarkers = [];
     var lastDates = [];
+    var getTreeIcon = function(_issue){
+        var icon = new TreeIcon();
+        icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
+        return icon;
+      }
+    var getHeadIcon = function(_issue){
+        var icon = new HeadIcon();
+        icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
+        return icon;
+      }
     return {
       setOpacity: function(_issue, _marker){
         var aid = _issue.author.id;
         date = new Date(_issue.created_on);
         if (aid in lastDates){
-          if (lastDates[aid].getTime() < date.getTime()){
-            console.log('move to new');
-            if (aid in lastMarkers){
-              lastMarkers[aid].options.opacity = 0.5;
-              lastMarkers[aid].options.iconSize = [6,6];
-            }
-            lastMarkers[aid]= _marker;
+          if (lastDates[aid].getTime() <= date.getTime()){
+            lastMarkers[aid].setIcon(getTreeIcon(_issue));
+            _marker.options.opacity=0.5;
+            _marker.setIcon(getHeadIcon(_issue));
             lastDates[aid] = date;
-            _marker.options.opacity = 1.0;
-            //_marker.options.icon.options.iconSize = [12,12];
+            lastDates[aid] = date
+          }else{
+            _marker.setIcon(getTreeIcon(_issue));
+            _marker.options.opacity=0.5;
           }
         }else{
-          //console.log(_marker)
-          _marker.options.opacity = 1.0;
-          //_marker.options.icon.options.iconSize = [12,12];
-          lastDates[aid] = date
+          _marker.setIcon(getHeadIcon(_issue));
           lastMarkers[aid] = _marker;
+          lastDates[aid] = date
         }
       }
+    }
+});
+var HeadIcon = L.Icon.extend({
+    options: {
+        iconUrl: '/img/marker-icon-2x.png',
+        iconSize:     [12, 12],
+        popupAnchor:  [7, -41],
     }
 });
 var TreeIcon = L.Icon.extend({
     options: {
         iconUrl: '/img/marker-icon-2x.png',
         iconSize:     [6, 6],
-        popupAnchor:  [7, -41]
+        popupAnchor:  [7, -41],
     }
 });
 var TaskIcon = L.Icon.extend({
@@ -268,7 +281,7 @@ var TaskLoader = (function(){
                   var layer = L.geoJson(geometry,{
                       pointToLayer: function (feature, latlng) {
                         var icon = taskLoader.getIcon(issue);
-                        var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
+                        var marker = L.marker(latlng, {icon: taskIcon});
                         marker.issue = issue;
                         if (markers[taskId] == undefined) markers[taskId] = {};
                         markers[taskId][iid] = marker;
