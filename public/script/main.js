@@ -1,11 +1,10 @@
 var map;
-var markers = [];
 var firsttime = true;
 var issues = [];
 var MAPBOX_URL = 'memeshiexe.j033d7pl'
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
-var taskLoader
-
+var taskLoader;
+var markerController;
 $(function() {
   taskLoader = new TaskLoader();
   $("#show-about").click(function() {
@@ -20,6 +19,7 @@ $(function() {
         taskLoader.load(tid);
       }else{
         taskLoader.cancel(tid);
+        markerController.hideMarkers(tid);
       }
   })
 });
@@ -89,13 +89,12 @@ $(window).load(function() {
   new L.Control.Zoom({ position: 'topright' }).addTo(map);
   //map.addLayer(googleLayer);
   //
+  markerController = new makeIssueMarkerController();
   readIssues();
 
 });
 
 var readIssues = function(){
-  var treeIcon = new TreeIcon();
-  var markerController = makeIssueMarkerController();
   var loadIssues = function(offset){
     $.getJSON('/issues.json?offset=' + offset + "&limit=100").done(function(json){
     //console.log('done');
@@ -113,7 +112,6 @@ var readIssues = function(){
               return markerController.loadMarker(issue, latlng);
             }
           }).addTo(map);
-        markers.push(layer);
         //console.log(issue);
         var popupHtml = '';
         popupHtml = '<a href="http://beta.shirasete.jp/issues/' + issue.id + '" target="_blank"><h2>' + issue.subject + '</h2></a>';
@@ -193,6 +191,7 @@ var makeIssueMarkerController = (function(){
     var lastMarkers = [];
     var lastDates = [];
     var markers = {};
+    var hiddenmarkers = [];
     var getTreeIcon = function(_issue){
         var icon = new TreeIcon();
         icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
@@ -210,6 +209,7 @@ var makeIssueMarkerController = (function(){
         if (markers[aid] == undefined) markers[aid] = [];
         marker.issue = _issue;
         markers[aid].push(marker)
+        console.log(markers);
         return marker;
       },
       arrangeIcons: function(){
@@ -238,7 +238,15 @@ var makeIssueMarkerController = (function(){
                   }
               });
             }
+            if (hiddenmarkers.indexOf(key) > -1){
+              marker.setOpacity(0);
+            }
           });
+      },
+      showMarkers: function(tid){
+      },
+      hideMarkers: function(tid){
+        hiddenmarkers.push(tid);
       }
     }
 });
