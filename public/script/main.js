@@ -17,6 +17,7 @@ $(function() {
       var tid = $(this).attr('id').split('_')[1];
       if ($(this).prop('checked') == true){
         taskLoader.load(tid);
+        markerController.showMarkers(tid);
       }else{
         taskLoader.cancel(tid);
         markerController.hideMarkers(tid);
@@ -209,14 +210,13 @@ var makeIssueMarkerController = (function(){
         if (markers[aid] == undefined) markers[aid] = [];
         marker.issue = _issue;
         markers[aid].push(marker)
-        console.log(markers);
         return marker;
       },
       arrangeIcons: function(){
         $.each(markers, function(key, markers2){
             var maxId;
             var maxDate;
-            $.each(markers2, function(key,marker){
+            $.each(markers2, function(k,marker){
                 var date = new Date(marker.issue.created_on);
                 if (maxDate == undefined ||
                   maxDate.getTime() < date.getTime()
@@ -226,7 +226,6 @@ var makeIssueMarkerController = (function(){
                 }
               });
             if (lastMarkers[key] == undefined || lastMarkers[key].issue.id != maxId){
-              console.log('renew max time!');
               $.each(markers2, function(k,marker){
                   if (marker.issue.id == maxId){
                     marker.setIcon(getHeadIcon(marker.issue));
@@ -239,11 +238,15 @@ var makeIssueMarkerController = (function(){
               });
             }
             if (hiddenmarkers.indexOf(key) > -1){
-              marker.setOpacity(0);
+              $.each(markers2, function(k,marker){
+                marker.setOpacity(0);
+              });
             }
           });
       },
       showMarkers: function(tid){
+        hiddenmarkers.splice(hiddenmarkers.indexOf(tid), 1);
+        lastMarkers[tid] = undefined;
       },
       hideMarkers: function(tid){
         hiddenmarkers.push(tid);
@@ -287,7 +290,6 @@ var TaskLoader = (function(){
         return taskIcon;
       },
       load: function(taskId){
-        console.log('load ' + taskId);
         var _this = this;
         $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
             //console.log(json);
