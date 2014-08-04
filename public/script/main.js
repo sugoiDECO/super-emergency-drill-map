@@ -6,12 +6,19 @@ var MAPBOX_URL = 'memeshiexe.j033d7pl'
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
 
 $(function() {
+  var _taskLoader = new taskLoader();
   $("#show-about").click(function() {
     $('#about').fadeIn(500);
   });
   $("#close-about").click(function() {
     $('#about').fadeOut(500);
   });
+  $("#menu input[type='checkbox']").click(function(){
+      if ($(this).prop('checked') == true){
+        var tid = $(this).attr('id').split('_')[1];
+        _taskLoader.load(tid);
+      }
+  })
 });
 
 $(window).load(function() {
@@ -205,6 +212,45 @@ var TreeIcon = L.Icon.extend({
         iconUrl: '/img/marker-icon-2x.png',
         iconSize:     [6, 6],
         popupAnchor:  [7, -41]
+    }
+});
+var TaskIcon = L.Icon.extend({
+    options: {
+        iconUrl: '/img/task-icon-0.png',
+        iconSize:     [24, 24],
+        popupAnchor:  [7, -41]
+    }
+});
+var taskLoader = (function(){
+    var tasks = [];
+    var markers = {};
+    var taskIcon = new TaskIcon();
+    return {
+      load: function(taskId){
+        console.log('load ' + taskId);
+        $.getJSON('/tasks.json?task_id=' + taskId).done(function(json){
+          console.log(json);
+          $.each(json.issues, function(key, issue) {
+            if (issue.geometry == "") return;
+            var geometry = JSON.parse(issue.geometry);
+            tasks.push(issue.id)
+            var marker;
+            var layer = L.geoJson(geometry,{
+                pointToLayer: function (feature, latlng) {
+                  if (issue.status.id == 3 || issue.status.id == 4){
+                    taskIcon.options.iconUrl = '/img/task-icon-done-' + (issue.author.id % 6) + '.png';
+                  }else{
+                    taskIcon.options.iconUrl = '/img/task-icon-' + (issue.author.id % 6) + '.png';
+                  }
+                  var marker = L.marker(latlng, {icon: taskIcon, opacity:1.0});
+                  return marker;
+                }
+              }).addTo(map);
+            if (markers[issue.id] == undefined) markers[issue.id] = [];
+            markers[issue.id].push(layer);
+          })
+      })
+      }
     }
 });
 

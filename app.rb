@@ -25,3 +25,9 @@ get '/issues/:id.json' do
   open("http://beta.shirasete.jp/issues/#{issue_id}.json?include=attachments")
 end
 
+get '/tasks.json' do
+  tid = params[:task_id];
+  content_type :json
+  open("http://beta.shirasete.jp/projects/56/issues.json?assigned_to_id=#{tid}").read
+end
+
