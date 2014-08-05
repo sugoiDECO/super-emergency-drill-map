@@ -40,6 +40,10 @@ html, body, #map {
   float:left;
   margin-right:20px;
 }
+#logo img{
+  width:350px;
+  margin-top:8px;
+}
 #timer {
   font-family: "Osaka－等幅","Osaka-Mono";
   font-weight: bolder;
