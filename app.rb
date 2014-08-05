@@ -16,7 +16,7 @@ get '/issues.json' do
   num = params[:num] || "100"
   offset = params[:offset] || "0"
   content_type :json
-  open("http://beta.shirasete.jp/projects/57/issues.json?limit=100&offset=#{offset}").read
+  open("http://beta.shirasete.jp/projects/57/issues.json?limit=100&created_on=2014-08-05&offset=#{offset}").read
 end
 
 get '/issues/:id.json' do
