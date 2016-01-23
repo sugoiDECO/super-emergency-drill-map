@@ -72,7 +72,6 @@ $(window).load(function() {
   });
 
 
-
   var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
   map.addLayer(kmlLayer);
   kmlLayer.on('loaded', function(e){
