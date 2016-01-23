@@ -30,7 +30,7 @@ $(function() {
 $(window).load(function() {
   //console.log('hello');
 
-  map = L.map('map', {zoomControl: true}).setView([34.6042334, 135.5530289], 5);
+  map = L.map('map', {zoomControl: false}).setView([34.6042334, 135.5530289], 5);
   console.log(map);
   console.log("Hollo World");
 
@@ -71,13 +71,13 @@ $(window).load(function() {
       hinanbasho.setStyle({opacity:0.3});
   });
 
-  /*
+
   var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
   map.addLayer(kmlLayer);
   kmlLayer.on('loaded', function(e){
       kmlLayer.setStyle({opacity:0.3, scale:0.1});
     });
-    */
+
   var tonerUrl = "http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png";
   var url = tonerUrl.replace(/({[A-Z]})/g, function(s) {
     return s.toLowerCase();
