@@ -28,5 +28,5 @@ end
 get '/tasks.json' do
   tid = params[:task_id];
   content_type :json
-  open("http://beta.shirasete.jp/projects/56/issues.json?assigned_to_id=#{tid}").read
+  open("http://beta.shirasete.jp/projects/60/issues.json?assigned_to_id=#{tid}").read
 end

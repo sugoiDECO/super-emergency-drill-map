@@ -200,19 +200,19 @@ var makeIssueMarkerController = (function(){
     var hiddenmarkers = IDS_DEFAULT.concat();
     var getTreeIcon = function(_issue){
         var icon = new TreeIcon();
-        icon.options.iconUrl = '/img/marker-icon-' + (_issue.author.id % 6) + '-2x.png';
+        icon.options.iconUrl = '/img/marker-icon-' + (_issue.assigned_to.id % 6) + '-2x.png';
         return icon;
       }
     var getHeadIcon = function(_issue){
         var icon = new HeadIcon();
-        icon.options.iconUrl = '/img/head-icon-' + (_issue.author.id % 6) + '.gif';
+        icon.options.iconUrl = '/img/head-icon-' + (_issue.assigned_to.id % 6) + '.gif';
         return icon;
       }
     return {
       loadMarker: function(_issue, latlng){
         var marker = L.marker(latlng, {icon: getTreeIcon(_issue)});
         marker.setOpacity(0.7);
-        var aid = _issue.author.id;
+        var aid = _issue.assigned_to.id;
         if (markers[aid] == undefined) markers[aid] = [];
         marker.issue = _issue;
         markers[aid].push(marker)
