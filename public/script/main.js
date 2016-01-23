@@ -72,7 +72,7 @@ $(window).load(function() {
   });
 
 
-  var kmlLayer = new L.KML('/kml/POINT_TEXT.kml', {async: true});
+  var kmlLayer = new L.KML('/kml/deco_osaka-Medical_Institution.kml', {async: true});
   map.addLayer(kmlLayer);
   kmlLayer.on('loaded', function(e){
       kmlLayer.setStyle({opacity:0.3, scale:0.1});
