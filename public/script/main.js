@@ -31,6 +31,7 @@ $(window).load(function() {
   //console.log('hello');
 
   map = L.map('map', {zoomControl: false}).setView([34.6042334, 135.5530289], 5);
+  console.log(map);
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
