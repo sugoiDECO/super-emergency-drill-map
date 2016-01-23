@@ -30,7 +30,7 @@ $(function() {
 $(window).load(function() {
   //console.log('hello');
 
-  map = L.map('map', {zoomControl: false}).setView([34.603815, 135.552546], 5);
+  map = L.map('map', {zoomControl: false}).setView([34.6042334, 135.5530289], 5);
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
