@@ -30,7 +30,7 @@ $(function() {
 $(window).load(function() {
   //console.log('hello');
 
-  map = L.map('map', {zoomControl: false}).setView([35.67740687825185, 139.71395820379257], 5);
+  map = L.map('map', {zoomControl: false}).setView([34.603815, 135.552546], 5);
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
@@ -342,4 +342,3 @@ var TaskLoader = (function(){
       }
     }
 });
-
