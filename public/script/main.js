@@ -289,9 +289,9 @@ var TaskLoader = (function(){
     return {
       getIcon: function(issue){
         if (issue.status.id == 3 || issue.status.id == 4){
-          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
+          // taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
         }else{
-          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
+          // taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
         }
         return taskIcon;
       },
