@@ -30,7 +30,7 @@ $(function() {
 $(window).load(function() {
   //console.log('hello');
 
-  map = L.map('map', {zoomControl: false}).setView([34.6042334, 135.5530289], 5);
+  map = L.map('map', {zoomControl: false}).setView([34.596201, 135.5160848], 14);
   console.log(map);
   console.log("Hollo World");
 
