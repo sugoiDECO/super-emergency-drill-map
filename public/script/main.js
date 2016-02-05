@@ -58,18 +58,19 @@ $(window).load(function() {
          };
        }
      });
-  var runLayer = new L.KML('/kml/KINKYUYUSORO_AREA.kml', {async: true});
-  map.addLayer(runLayer);
-  runLayer.on("loaded", function(e) {
-      map.fitBounds(e.target.getBounds());
-      runLayer.setStyle({opacity:0.3});
-  });
 
-  var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
-  map.addLayer(hinanbasho);
-  hinanbasho.on("loaded", function(e) {
-      hinanbasho.setStyle({opacity:0.3});
-  });
+  //var runLayer = new L.KML('/kml/KINKYUYUSORO_AREA.kml', {async: true});
+  //map.addLayer(runLayer);
+  //runLayer.on("loaded", function(e) {
+  //    map.fitBounds(e.target.getBounds());
+  //    runLayer.setStyle({opacity:0.3});
+  //});
+
+  //var hinanbasho = new L.KML('/kml/HINANBASHO_AREA.kml', {async: true});
+  //map.addLayer(hinanbasho);
+  //hinanbasho.on("loaded", function(e) {
+  //    hinanbasho.setStyle({opacity:0.3});
+  //});
 
 
   var kmlLayer = new L.KML('/kml/deco_hirano_places.kml', {async: true});
