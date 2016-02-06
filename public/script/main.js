@@ -28,11 +28,9 @@ $(function() {
 });
 
 $(window).load(function() {
-  //console.log('hello');
 
   map = L.map('map', {zoomControl: false}).setView([34.597298, 135.503193], 15);
   console.log(map);
-  console.log("Hollo World");
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
@@ -131,6 +129,7 @@ var readIssues = function(){
               }).fail(getIssueFail);
           });
       });
+  
     markerController.arrangeIcons();
     if (firsttime){
       //map.fitBounds(markersToBounds(markers));
@@ -224,6 +223,7 @@ var makeIssueMarkerController = (function(){
             var maxId;
             var maxDate;
             $.each(markers2, function(k,marker){
+
                 var date = new Date(marker.issue.created_on);
                 if (maxDate == undefined ||
                   maxDate.getTime() < date.getTime()
@@ -254,6 +254,7 @@ var makeIssueMarkerController = (function(){
       showMarkers: function(tid){
         hiddenmarkers.splice(hiddenmarkers.indexOf(tid), 1);
         lastMarkers[tid] = undefined;
+
       },
       hideMarkers: function(tid){
         hiddenmarkers.push(tid);
@@ -290,7 +291,11 @@ var TaskLoader = (function(){
     return {
       getIcon: function(issue){
         if (issue.status.id == 3 || issue.status.id == 4){
-          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
+          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
+          taskIcon.options.iconSize = [24,24];
+        }else if (issue.status.id == 1) {
+          taskIcon.options.iconUrl = '/img/marker-icon-' + (issue.assigned_to.id % 6) + '-2x.png';
+          taskIcon.options.iconSize = [8,8];
         }else{
           taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
         }
@@ -345,3 +350,7 @@ var TaskLoader = (function(){
       }
     }
 });
+
+function setFadeTime() {
+
+}
