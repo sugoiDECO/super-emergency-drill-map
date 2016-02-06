@@ -7,6 +7,7 @@ var IDS_DEFAULT = ["109","110","111","112","113","114"];
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
 var taskLoader;
 var markerController;
+var checkboxes;
 $(function() {
   taskLoader = new TaskLoader();
   $("#show-about").click(function() {
@@ -18,6 +19,7 @@ $(function() {
   $("#menu input[type='checkbox']").click(function(){
       var tid = $(this).attr('id').split('_')[1];
       if ($(this).prop('checked') == true){
+        console.log(tid);
         taskLoader.load(tid);
         markerController.showMarkers(tid);
       }else{
@@ -31,6 +33,8 @@ $(window).load(function() {
 
   map = L.map('map', {zoomControl: false}).setView([34.597298, 135.503193], 15);
   console.log(map);
+  
+  // console.log($("[name=TeamA]").val());
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
@@ -96,6 +100,16 @@ $(window).load(function() {
   markerController = new makeIssueMarkerController();
   readIssues();
 
+  checkboxes = $("#menu input[type='checkbox']");
+
+  for (var i=0; i<checkboxes.length; i++) {
+    var checkbox = checkboxes[i];
+    if(checkbox["checked"] == true) {
+      console.log(checkbox["name"]);
+      this.taskLoader.load(checkbox["name"]);
+      markerController.showMarkers(checkbox["name"]);
+    }
+  }
 });
 
 var readIssues = function(){
