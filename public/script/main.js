@@ -73,7 +73,7 @@ $(window).load(function() {
   //});
 
 
-  var kmlLayer = new L.KML('/kml/deco_hirano_places.kml', {async: true});
+  var kmlLayer = new L.KML('/kml/deco_sumiyoshi_places.kml', {async: true});
   map.addLayer(kmlLayer);
   kmlLayer.on('loaded', function(e){
       kmlLayer.setStyle({opacity:0.3, scale:0.1});
