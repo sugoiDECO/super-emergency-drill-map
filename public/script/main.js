@@ -7,6 +7,7 @@ var IDS_DEFAULT = ["109","110","111","112","113","114"];
 //var MAPBOX_URL = 'georepublic.h7fk5kam'
 var taskLoader;
 var markerController;
+var checkboxes;
 $(function() {
   taskLoader = new TaskLoader();
   $("#show-about").click(function() {
@@ -18,6 +19,7 @@ $(function() {
   $("#menu input[type='checkbox']").click(function(){
       var tid = $(this).attr('id').split('_')[1];
       if ($(this).prop('checked') == true){
+        console.log(tid);
         taskLoader.load(tid);
         markerController.showMarkers(tid);
       }else{
@@ -28,11 +30,11 @@ $(function() {
 });
 
 $(window).load(function() {
-  //console.log('hello');
 
   map = L.map('map', {zoomControl: false}).setView([34.597298, 135.503193], 15);
   console.log(map);
-  console.log("Hollo World");
+  
+  // console.log($("[name=TeamA]").val());
 
   //map.on('popupopen', function(e) {
   //  console.log('popupopen');
@@ -98,6 +100,16 @@ $(window).load(function() {
   markerController = new makeIssueMarkerController();
   readIssues();
 
+  checkboxes = $("#menu input[type='checkbox']");
+
+  for (var i=0; i<checkboxes.length; i++) {
+    var checkbox = checkboxes[i];
+    if(checkbox["checked"] == true) {
+      console.log(checkbox["name"]);
+      this.taskLoader.load(checkbox["name"]);
+      markerController.showMarkers(checkbox["name"]);
+    }
+  }
 });
 
 var readIssues = function(){
@@ -131,6 +143,7 @@ var readIssues = function(){
               }).fail(getIssueFail);
           });
       });
+  
     markerController.arrangeIcons();
     if (firsttime){
       //map.fitBounds(markersToBounds(markers));
@@ -224,6 +237,7 @@ var makeIssueMarkerController = (function(){
             var maxId;
             var maxDate;
             $.each(markers2, function(k,marker){
+
                 var date = new Date(marker.issue.created_on);
                 if (maxDate == undefined ||
                   maxDate.getTime() < date.getTime()
@@ -254,6 +268,7 @@ var makeIssueMarkerController = (function(){
       showMarkers: function(tid){
         hiddenmarkers.splice(hiddenmarkers.indexOf(tid), 1);
         lastMarkers[tid] = undefined;
+
       },
       hideMarkers: function(tid){
         hiddenmarkers.push(tid);
@@ -290,7 +305,11 @@ var TaskLoader = (function(){
     return {
       getIcon: function(issue){
         if (issue.status.id == 3 || issue.status.id == 4){
-          taskIcon.options.iconUrl = '/img/task-icon-done-' + issue.assigned_to.id + '.png';
+          taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
+          taskIcon.options.iconSize = [24,24];
+        }else if (issue.status.id == 1) {
+          taskIcon.options.iconUrl = '/img/marker-icon-' + (issue.assigned_to.id % 6) + '-2x.png';
+          taskIcon.options.iconSize = [8,8];
         }else{
           taskIcon.options.iconUrl = '/img/task-icon-' + issue.assigned_to.id + '.png';
         }
@@ -345,3 +364,7 @@ var TaskLoader = (function(){
       }
     }
 });
+
+function setFadeTime() {
+
+}
