@@ -1,4 +1,4 @@
-#すごい災害訓練DECOWebシステム画面（本部用移動軌跡表示システム）
+#DECOのWebシステム（本部用移動軌跡表示システム）
 
 ##動作確認済み環境
 ###サーバーサイド
@@ -17,15 +17,14 @@
 ・Ruby 2.2.1  
 ・Apache 2.4.7  
 
-##インフラ環境の設定
-###rbenv をインストール
-
-1.必要なパッケージのインストール
+##システムのセットアップ
+###1.必要なパッケージのインストール
 
 ```bash
 $ sudo apt-get install build-essential bison libreadline6-dev curl git-core zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev autoconf libncurses5-dev libffi-dev
 ```
-2.gitでrbenv,ruby-buildをダウンロード(clone)
+
+###2.gitでrbenv,ruby-buildをダウンロード(clone)
 
 ```bash
 $ cd
@@ -33,7 +32,7 @@ $ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 $ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 
 ```
-3.もろもろの設定
+###3.パスの設定
 
 ```bash
 $ vi ~/.bashrc
@@ -44,7 +43,7 @@ eval "$(rbenv init -)"
 
 $ source ~/.bashrc
 ```
-4.Ruby2.2.1をインストール
+###4.Ruby2.2.1をインストール
 
 ```bash
 $ rbenv install 2.2.1
@@ -52,7 +51,7 @@ $ rbenv versions
 $ rbenv rehash
 $ rbenv global 2.2.1
 ```
-5.apacheにpassengerモジュールをインストール
+###5.apacheにpassengerモジュールをインストール
 
 ```bash
 $ gem install bundler
@@ -63,7 +62,7 @@ $ passenger-install-apache2-module
 Bundlerとは・・・Gemfileに記載されたパッケージの種類・バージョンのものをインストールするための仕組み。
 Phusion Passengerとは・・・RailsをApache上で動かすためのモジュール
 
-6.passenger-install-apache2-moduleのエラーメッセージででてきた部分のインストール
+###6.passenger-install-apache2-moduleのエラーメッセージででてきた部分のインストール
 
 ```bash
 $ passenger-install-apache2-module
@@ -88,7 +87,7 @@ $ sudo apt-get install libapr1-dev
 
 ```
 
-7.インストールがうまくいったら、最後にでてくるメッセージをコピー
+###7.インストールがうまくいったら、最後にでてくるメッセージをコピー
 
 ```bash
 Please edit your Apache configuration file, and add these lines:
@@ -105,14 +104,14 @@ applications on Apache, with a minimum amount of configuration!
 Press ENTER when you are done editing.
 ```
 
-8.GitHubからsuper-emergency-drill-mapをClone
+###8.GitHubからsuper-emergency-drill-mapをClone
 
 ```bash
 $ cd /var/www/html
 $ sudo git clone https://github.com/sugoiDECO/super-emergency-drill-map.git
 ```
 
-###Apacheの設定
+###9.Apacheの設定
 
 ```bash
 $ cd /etc/apache2/mods-available
@@ -165,7 +164,7 @@ $ sudo apachectl restart
 
 http://www.yamamo10.jp/yamamoto/comp/home_server/ubuntu_server/apache/index.php
 
-Bundlerでのインストール
+###10.Bundlerでのインストール
 この時のポイントは、Bundleのある場所をWhich bundle で確認する。
 
 ```bash
@@ -173,11 +172,11 @@ $ /home/vagrant/.rbenv/shims/bundle install --path vendor/bundle
 ```
 
 
-###Webシステム画面
+##Webシステム画面
 システムは、訓練本部で使用する Webシステムを示す。機能としては以下の通りである。
 ・DECO用アプリから送られてくる位置情報を元に、Webマップ上に訓練参加者の位置や行動履歴をのリアルタイム表示
 ・DECO用アプリから送られてくる情報を受信する
 
-![Kobito.WluB8m.png](https://qiita-image-store.s3.amazonaws.com/0/45482/8918d90c-926b-8ab5-2faa-51d46de0a569.png "Kobito.WluB8m.png")
+![Pasted image at 2016_02_07 01_06 PM.png](https://raw.githubusercontent.com/Kenyat1989/Markdown/master/image/Pasted.png?token=AHBEx6-QxzTYi2oACjcQx0NOy4iULqQSks5W7kNdwA%3D%3D)
 
 
