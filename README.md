@@ -1,27 +1,24 @@
-#DECOのWebシステムのセットアップ
+#すごい災害訓練DECOWebシステム画面（本部用移動軌跡表示システム）
 
-すごい災害訓練DECO用Webシステム・アプリケーション開発
-##Webシステム画面（本部用移動軌跡表示システム）
-
-#動作確認済み環境
-##サーバーサイド
+##動作確認済み環境
+###サーバーサイド
 ・Ubuntu 14.04  
 ・Ruby2.2.1  
 ・Apache2.4.7 + Passenger  
 ・sinatra1.4.6  
 
-##クライアントサイド
+###クライアントサイド
 ・MacOSX 10.11.3  
 ・Google Chrome 47.0.2526.111 (64-bit)  
 
 
-##動作環境
+###動作環境
 ・Ubuntu 14.04.3  
 ・Ruby 2.2.1  
 ・Apache 2.4.7  
 
-#インフラ環境の設定
-##rbenv をインストール
+##インフラ環境の設定
+###rbenv をインストール
 
 1.必要なパッケージのインストール
 
@@ -115,7 +112,7 @@ $ cd /var/www/html
 $ sudo git clone https://github.com/sugoiDECO/super-emergency-drill-map.git
 ```
 
-##Apacheの設定
+###Apacheの設定
 
 ```bash
 $ cd /etc/apache2/mods-available
@@ -176,7 +173,7 @@ $ /home/vagrant/.rbenv/shims/bundle install --path vendor/bundle
 ```
 
 
-##Webシステム画面
+###Webシステム画面
 システムは、訓練本部で使用する Webシステムを示す。機能としては以下の通りである。
 ・DECO用アプリから送られてくる位置情報を元に、Webマップ上に訓練参加者の位置や行動履歴をのリアルタイム表示
 ・DECO用アプリから送られてくる情報を受信する
