@@ -2,20 +2,20 @@
 
 ##動作確認済み環境
 ###サーバーサイド
-・Ubuntu 14.04  
-・Ruby2.2.1  
-・Apache2.4.7 + Passenger  
-・sinatra1.4.6  
+- Ubuntu 14.04  
+- Ruby2.2.1  
+- Apache2.4.7 + Passenger  
+- sinatra1.4.6  
 
 ###クライアントサイド
-・MacOSX 10.11.3  
-・Google Chrome 47.0.2526.111 (64-bit)  
+- MacOSX 10.11.3  
+- Google Chrome 47.0.2526.111 (64-bit)  
 
 
 ###動作環境
-・Ubuntu 14.04.3  
-・Ruby 2.2.1  
-・Apache 2.4.7  
+- Ubuntu 14.04.3  
+- Ruby 2.2.1  
+- Apache 2.4.7  
 
 ##システムのセットアップ
 ###1.必要なパッケージのインストール
@@ -59,7 +59,8 @@ $ gem install passenger
 $ passenger-install-apache2-module
 
 ```
-Bundlerとは・・・Gemfileに記載されたパッケージの種類・バージョンのものをインストールするための仕組み。
+
+Bundlerとは・・・Gemfileに記載されたパッケージの種類・バージョンのものをインストールするための仕組み  
 Phusion Passengerとは・・・RailsをApache上で動かすためのモジュール
 
 ###6.passenger-install-apache2-moduleのエラーメッセージででてきた部分のインストール
@@ -174,8 +175,9 @@ $ /home/vagrant/.rbenv/shims/bundle install --path vendor/bundle
 
 ##Webシステム画面
 システムは、訓練本部で使用する Webシステムを示す。機能としては以下の通りである。
-・DECO用アプリから送られてくる位置情報を元に、Webマップ上に訓練参加者の位置や行動履歴をのリアルタイム表示
-・DECO用アプリから送られてくる情報を受信する
+
+- DECO用アプリから送られてくる位置情報を元に、Webマップ上に訓練参加者の位置や行動履歴をのリアルタイム表示  
+- DECO用アプリから送られてくる情報を受信する  
 
 ![Pasted image at 2016_02_07 01_06 PM.png](https://raw.githubusercontent.com/Kenyat1989/Markdown/master/image/Pasted.png?token=AHBEx6-QxzTYi2oACjcQx0NOy4iULqQSks5W7kNdwA%3D%3D)
 
